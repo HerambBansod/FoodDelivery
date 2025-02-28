@@ -1,12 +1,12 @@
-import User from "@/components/User";
-import Index from "@/components/Index"
+ 
+import User from "@/components/User"
 
 
 export default function Home() {
   return (
     <main>
+    
       <User/>
-      <Index/>
     </main>
   );
 }
