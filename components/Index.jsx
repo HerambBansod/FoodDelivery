@@ -16,8 +16,8 @@ const restaurant = {
 
 const Home = () => {
   const [cart, setCart] = useState({});
-  const router = useRouter(); 
- 
+  const router = useRouter();
+
 
   useEffect(() => {
     console.log("Updated Cart:", cart);
@@ -54,61 +54,61 @@ const Home = () => {
     const email = localStorage.getItem("email");
 
     if (!email) {
-        alert("User email not found. Please log in.");
-        return;
+      alert("User email not found. Please log in.");
+      return;
     }
 
     try {
-        // Loop through all cart items and send email for each item
-        for (const item of Object.values(cart)) {
-            const { name, quantity, price } = item;
+      // Loop through all cart items and send email for each item
+      for (const item of Object.values(cart)) {
+        const { name, quantity, price } = item;
 
-            const response = await axios.post(`http://localhost:4000/home`, {
-                email,
-                name,
-                quantity,
-                price: (price * quantity).toFixed(2), // Calculate total price
-            });
+        const response = await axios.post(`http://localhost:4000/home`, {
+          email,
+          name,
+          quantity,
+          price: (price * quantity).toFixed(2), // Calculate total price
+        });
 
-            if (response.status !== 200) {
-                console.error(`Failed to send email for item: ${name}`);
-            }
+        if (response.status !== 200) {
+          console.error(`Failed to send email for item: ${name}`);
         }
+      }
 
-        alert("Emails sent successfully for all cart items!");
-        
-        // Send a follow-up email after 5 minutes
-        setTimeout(async () => {
-            try {
-                await axios.post(`http://localhost:4000/order-status`, {
-                    email,
-                    status: "Your order is on the way!"
-                });
-                console.log("Order on the way email sent!");
-            } catch (error) {
-                console.error("Error sending 'on the way' email:", error);
-            }
-        }, 5 * 60 * 1000); // 5 minutes in milliseconds
+      alert("Emails sent successfully for all cart items!");
 
-        // Send another follow-up email after 10 minutes
-        setTimeout(async () => {
-            try {
-                await axios.post(`http://localhost:4000/order-status`, {
-                    email,
-                    status: "Your order has been successfully placed!"
-                });
-                console.log("Order placed email sent!");
-            } catch (error) {
-                console.error("Error sending 'order placed' email:", error);
-            }
-        }, 10 * 60 * 1000); // 10 minutes in milliseconds
+      // Send a follow-up email after 5 minutes
+      setTimeout(async () => {
+        try {
+          await axios.post(`http://localhost:4000/order-status`, {
+            email,
+            status: "Your order is on the way!"
+          });
+          console.log("Order on the way email sent!");
+        } catch (error) {
+          console.error("Error sending 'on the way' email:", error);
+        }
+      }, 5 * 60 * 1000); // 5 minutes in milliseconds
 
-        router.push("/home");
+      // Send another follow-up email after 10 minutes
+      setTimeout(async () => {
+        try {
+          await axios.post(`http://localhost:4000/order-status`, {
+            email,
+            status: "Your order has been successfully placed!"
+          });
+          console.log("Order placed email sent!");
+        } catch (error) {
+          console.error("Error sending 'order placed' email:", error);
+        }
+      }, 10 * 60 * 1000); // 10 minutes in milliseconds
+
+      router.push("/home");
     } catch (error) {
-        console.error("Error during checkout:", error);
-        alert("An error occurred while processing your checkout.");
+      console.error("Error during checkout:", error);
+      alert("An error occurred while processing your checkout.");
     }
-};
+  };
 
 
 
